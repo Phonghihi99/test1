@@ -1,0 +1,22 @@
+name: Build Locket TuanPhong275 banner
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Download upstream and replace banner only
+        run: python3 scripts/build_locket.py
+      - name: Commit generated JavaScript
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add js/Locket_Unlocked.js
+          if ! git diff --cached --quiet; then
+            git commit -m "Update Locket JS from upstream with TuanPhong275 banner"
+            git push
+          fi
